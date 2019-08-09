@@ -10,7 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//Route welcome Laravel
 Route::get('/', function () {
     return view('welcome');
+});
+
+//Route admin
+Route::get('admin', function() {
+    return view('admin');
+});
+
+//Route index
+Route::get('index', function() {
+    return view('index');
 });
