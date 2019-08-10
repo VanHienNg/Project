@@ -30,7 +30,11 @@ Route::get('login', function() {
     return view('login');
 });
 
-//Route register
-Route::get('register', function() {
-    return view('register');
-});
+//Route to get static register
+// Route::get('register', function() {
+//     return view('register');
+// });
+
+//Route to get dynamic register
+Route::get('/register', 'RegistrationController@create');
+Route::post('register', 'RegistrationController@store');
