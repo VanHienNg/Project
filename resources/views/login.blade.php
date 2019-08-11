@@ -24,6 +24,7 @@
 
   <!-- Core plugin JavaScript-->
   <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
 
   <!-- Custom scripts for all pages-->
   <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
@@ -49,12 +50,13 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                   </div>
-                  <form class="user">
+                  <form class="user" method="post" action="/login">
+                    {{ csrf_field() }}
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-user" id="user-name" placeholder="Enter Your Username...">
+                      <input type="text" class="form-control form-control-user" id="user-name" name="name" placeholder="Enter Your Username...">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="user-password" placeholder="Password">
+                      <input type="password" class="form-control form-control-user" id="user-password" name="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small">
@@ -62,9 +64,9 @@
                         <label class="custom-control-label" for="customCheck">Remember Me</label>
                       </div>
                     </div>
-                    <a href="#" class="btn btn-primary btn-user btn-block">
+                    <button type="submit" class="btn btn-primary btn-user btn-block">
                       Login
-                    </a>
+                    </button>
                     <!-- <hr> -->
                     <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
                       <i class="fab fa-google fa-fw"></i> Login with Google
@@ -72,6 +74,7 @@
                     <a href="index.html" class="btn btn-facebook btn-user btn-block">
                       <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                     </a> -->
+                    
                   </form>
                   <!-- <hr> -->
                   <!-- <div class="text-center">

@@ -14,17 +14,17 @@ class RegistrationController extends Controller
 
     public function store() {
         $this->validate(request(), [ 
-            'name' => 'required',
-            'email' => "required|email",
-            'password' => "required",
-            'password-comfirmation' => 'same:password'
+            'name' => 'bail|required',
+            'email' => "bail|required|email",
+            'password' => "bail|required",
+            'password-comfirmation' => 'bail|same:password'
         ]);
 
         $user = User::create(request(['name', 'email', 'password']));
 
         auth() -> login($user);
 
-        return redirect()->to('/product');
+        return redirect() -> to('/index');
     }
     
 }

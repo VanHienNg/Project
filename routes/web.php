@@ -25,10 +25,10 @@ Route::get('index', function() {
     return view('index');
 });
 
-//Route login
-Route::get('login', function() {
-    return view('login');
-});
+//Route to get static login
+// Route::get('login', function() {
+//     return view('login');
+// });
 
 //Route to get static register
 // Route::get('register', function() {
@@ -38,3 +38,8 @@ Route::get('login', function() {
 //Route to get dynamic register
 Route::get('/register', 'RegistrationController@create');
 Route::post('register', 'RegistrationController@store');
+
+//Route to get dynimic login
+Route::get('/login', 'SessionsController@create');
+Route::post('/login', 'SessionsController@store');
+// Route::get('/login', 'SessionsController@destroy');
