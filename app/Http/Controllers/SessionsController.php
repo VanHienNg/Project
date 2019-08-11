@@ -20,9 +20,10 @@ class SessionsController extends Controller
         return redirect() -> to('/index');
     }
 
-    // public function destroy() {
-    //     auth() -> logout();
+    public function destroy() {
+        
+        auth() -> logout();
 
-    //     return redirect() -> to('/index');
-    // }
+        return redirect() -> to('/index');
+    }
 }

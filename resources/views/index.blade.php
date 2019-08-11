@@ -45,18 +45,18 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"> -->
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <!-- <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
         <div class="sidebar-brand-text mx-3">SB Admin</div>
-      </a>
+      </a> -->
 
       <!-- Divider -->
-      <hr class="sidebar-divider my-0">
+      <!-- <hr class="sidebar-divider my-0"> -->
 
       <!-- Nav Item - Dashboard
       <li class="nav-item">
@@ -66,15 +66,15 @@
       </li> -->
 
       <!-- Divider -->
-      <hr class="sidebar-divider">
+      <!-- <hr class="sidebar-divider"> -->
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      <!-- <div class="sidebar-heading">
         Interface
-      </div>
+      </div> -->
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Components</span>
@@ -86,7 +86,7 @@
             <a class="collapse-item" href="cards.html">Products</a>
           </div>
         </div>
-      </li>
+      </li> -->
 
       <!-- Nav Item - Utilities Collapse Menu -->
       <!-- <li class="nav-item">
@@ -155,7 +155,7 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div> --> 
 
-    </ul>
+    <!-- </ul> -->
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -319,9 +319,9 @@
             @if(auth() -> check())
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline" id="user-login-name" style="font-size:20px; color:#5a5d6a">{{ auth()->user()->name }}</span>
-                <img class="img-profile" style="height:40px;width:40px" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <img class="img-profile" style="height:40px;width:40px" src="{{ asset('template/img/user-icon.jpg')}}">
               </a>
-            @endif
+            
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
@@ -337,11 +337,16 @@
                   Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="/logout">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
               </div>
+              @else
+              <a class="nav-link dropdown-toggle" href="/login" id="userDropdown" role="button">
+                <span class="mr-2 d-none d-lg-inline" id="user-login-name" style="font-size:20px; color:#5a5d6a">Login</span>
+              </a>
+              @endif
             </li>
 
           </ul>
@@ -360,7 +365,7 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Product</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
                     <!-- Content Row -->
                     <div class="row">
@@ -471,7 +476,7 @@
   </a>
 
   <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -483,11 +488,11 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="/index">Logout</a>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </body>
 
 </html>

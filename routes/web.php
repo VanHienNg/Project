@@ -39,7 +39,7 @@ Route::get('index', function() {
 Route::get('/register', 'RegistrationController@create');
 Route::post('register', 'RegistrationController@store');
 
-//Route to get dynimic login
+//Route to get dynimic login + logout
 Route::get('/login', 'SessionsController@create');
 Route::post('/login', 'SessionsController@store');
-// Route::get('/login', 'SessionsController@destroy');
+Route::get('/logout', 'SessionsController@destroy');
