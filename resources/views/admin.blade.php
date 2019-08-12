@@ -5,6 +5,7 @@
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -30,6 +31,7 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
 
   <!-- Page level plugins -->
   <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -37,6 +39,7 @@
 
   <!-- Page level custom scripts -->
   <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+
 </head>
 
 <body id="page-top">
@@ -316,9 +319,10 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
+            @if(auth() -> check())
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline" id="user-login-name" style="font-size:20px; color:#5a5d6a">Valerie Luna</span>
-                <img class="img-profile" style="height:40px;width:40px" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <span class="mr-2 d-none d-lg-inline" id="user-login-name" style="font-size:20px; color:#5a5d6a">{{ auth()->user()->name }}</span>
+                <img class="img-profile" style="height:40px;width:40px" src="{{ asset('template/img/user-icon.jpg')}}">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -340,6 +344,7 @@
                   Logout
                 </a>
               </div>
+              @endif
             </li>
 
           </ul>
@@ -351,13 +356,18 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+          <h1 class="h3 mb-2 text-gray-800">Staffs</h1>
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+              <div class="row">
+                <h6 class="col-6 m-0 font-weight-bold text-primary">DataTables Example</h6>
+                <div class="col-6 text-right">
+                  <button class="btn btn-primary" id="create-new-user">Add Staff</button>
+                </div>
+              </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -370,16 +380,19 @@
                       <th>Option</th>
                     </tr>
                   </thead>
-                    <tr>
-                      <td>1</td>
-                      <td>Donna Snider</td>
-                      <td>Customer Support</td>
-                      <td style="width:35%">
-                          <button class="btn btn-primary" style="width:25%">Edit</button>
-                          <button class="btn btn-danger" style="width:25%">Delete</button>
-                          <button class="btn btn-primary" style="width:45%">Show product</button>
-                      </td>
-                    </tr>
+                  <tbody id="users-crud">
+                    @foreach ($users as $user)
+                      <tr id="user_id_{{ $user->id }}">
+                        <td>1</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td style="width:35%">
+                            <button id="edit-user" data-id="{{ $user->id }}" class="btn btn-primary" style="width:25%">Edit</button>
+                            <button id="delete-user" data-id="{{ $user->id }}" class="btn btn-danger" style="width:25%">Delete</button>
+                            <button id="show-pruduct" data-id="{{ $user->id }}" class="btn btn-primary" style="width:45%">Show product</button>
+                        </td>
+                      </tr>
+                      @endforeach
                   </tbody>
                 </table>
               </div>
@@ -413,6 +426,54 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
+  <!-- Edit and Register Modal -->
+  <div class="modal fade" id="ajax-crud-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title" id="userCrudModal"></h4>
+          </div>
+          <div class="modal-body">
+              <form method="post" id="userForm" name="userForm" class="form-horizontal">
+                <input type="hidden" name="user_id" id="user_id">
+                  <div class="form-group" style="margin-top:10px">
+                      <label for="name" class="col-sm-6 control-label">Name:</label>
+                      <div class="col-sm-12">
+                          <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required="">
+                      </div>
+                  </div>
+  
+                  <div class="form-group" style="margin-top:10px">
+                      <label class="col-sm-6 control-label">Email:</label>
+                      <div class="col-sm-12">
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="" required="">
+                      </div>
+                  </div>
+
+                  <div class="form-group" style="margin-top:10px">
+                      <label class="col-sm-6 control-label">Password:</label>
+                      <div class="col-sm-12">
+                          <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="" required="">
+                      </div>
+                  </div>
+
+                  <div class="form-group" style="margin-top:10px">
+                      <label class="col-sm-6 control-label">Password Confirm:</label>
+                      <div class="col-sm-12">
+                          <input type="password" class="form-control" id="password-confirm" name="password-confirm" placeholder="Refill Password" value="" required="">
+                      </div>
+                  </div>
+
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="btn-save" value="create">Save changes
+              </button>
+          </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Logout Modal-->
   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -426,11 +487,99 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+          <a class="btn btn-primary" href="/logout">Logout</a>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- CRUD script -->
+  <script>
+    $(document).ready(function () {
+      $.ajaxSetup({
+        headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+      });
+      /*  When user click add user button */
+      $('#create-new-user').click(function () {
+          $('#btn-save').val("create-user");
+          $('#userForm').trigger("reset");
+          $('#userCrudModal').html("Add New User");
+          $('#ajax-crud-modal').modal('show');
+      });
+  
+    /* When click edit user */
+      $('body').on('click', '#edit-user', function () {
+        var user_id = $(this).data('id');
+        $.get('admin/' + user_id +'/edit', function (data) {
+          $('#userCrudModal').html("Edit User");
+            $('#btn-save').val("edit-user");
+            $('#ajax-crud-modal').modal('show');
+            $('#user_id').val(data.id);
+            $('#name').val(data.name);
+            $('#email').val(data.email);
+            $('#password').val(data.password);
+        })
+    });
+    //Delete user login
+      $('body').on('click', '#delete-user', function () {
+          var user_id = $(this).data("id");
+          confirm("Are You sure want to delete !");
+  
+          $.ajax({
+              type: "DELETE",
+              url: "{{ url('admin') }}"+'/'+user_id,
+              success: function (data) {
+                  $("#user_id_" + user_id).remove();
+              },
+              error: function (data) {
+                  console.log('Error:', data);
+              }
+          });
+      });   
+    });
+  
+    if ($("#userForm").length > 0) {
+          $("#userForm").validate({
+            
+        submitHandler: function(form) {
+    
+          var actionType = $('#btn-save').val();
+          $('#btn-save').html('Sending..');
+          
+          $.ajax({
+              data: $('#userForm').serialize(),
+              url: "/admin",
+              type: "POST",
+              dataType: 'json',
+              success: function (data) {
+                  var user = '<tr id="user_id_' + data.id + '"><td>"1"</td><td>' + data.name + '</td><td>' + data.email + '</td>';
+                  user += '<td><button href="javascript:void(0)" id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Edit</button></td>';
+                  user += '<td><button href="javascript:void(0)" id="delete-user" data-id="' + data.id + '" class="btn btn-danger delete-user">Delete</button></td>';
+                  user += '<td><button href="javascript:void(0)" id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
+                  
+                  if (actionType == "create-user") {
+                      $('#users-crud').prepend(user);
+                  } else {
+                      $("#user_id_" + data.id).replaceWith(user);
+                  }
+    
+                  $('#userForm').trigger("reset");
+                  $('#ajax-crud-modal').modal('hide');
+                  $('#btn-save').html('Save Changes');
+                  
+              },
+              error: function (data) {
+                  console.log('Error:', data);
+                  $('#btn-save').html('Save Changes');
+              }
+          });
+        }
+      })
+    }
+  </script>
+
 </body>
 
 </html>
