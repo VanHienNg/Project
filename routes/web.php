@@ -45,4 +45,4 @@ Route::post('/login', 'SessionsController@store');
 Route::get('/logout', 'SessionsController@destroy');
 
 //Route CRUD admin
-Route::resource('/admin', 'CrudAdminController');
+Route::resource('/admin', 'AdminController');

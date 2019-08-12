@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Redirect,Response;
 use App\User;
 
-class CrudAdminController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,11 +39,11 @@ class CrudAdminController extends Controller
     public function store(Request $request)
     {
         $userId = $request->user_id;
-        $user   =   User::updateOrCreate(['id' => $userId],
+        $user = User::updateOrCreate(['id' => $userId],
                         [
-                        'name' => $request->name, 
-                        'email' => $request->email,
-                        'password' => $request->password
+                            'name' => $request->name, 
+                            'email' => $request->email,
+                            'password' => $request->password
                         ]
                     );
     
