@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SessionsController extends Controller
 {
@@ -15,9 +16,14 @@ class SessionsController extends Controller
             return back() -> withErrors([
                 'message' => 'Password or Username is incorrect' 
             ]);
+        } else {
+            $user = Auth::user()->role;
+            if($user == "admin") {
+                return redirect() -> to('/admin');
+            } else {
+                return redirect() -> to('/index');
+            }
         }
-
-        return redirect() -> to('/index');
     }
 
     public function destroy() {

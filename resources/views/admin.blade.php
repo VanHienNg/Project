@@ -451,6 +451,17 @@
               </div>
 
               <div class="form-group" style="margin-top:10px">
+                  <label class="col-sm-6 control-label">Email:</label>
+                  <div class="col-sm-12">
+                      <select class="col-sm-4 form-control" name="role" id="role" name="role" value="" require="">
+                        <option>-- Role --</option>
+                        <option value="staff">Staff</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                  </div>
+              </div>
+
+              <div class="form-group" style="margin-top:10px">
                   <label class="col-sm-6 control-label">Password:</label>
                   <div class="col-sm-12">
                       <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="" required="">
@@ -495,10 +506,10 @@
   <!-- CRUD script -->
   <script>
     $.ajaxSetup({
-        headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-      });
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+    });
 
     $(document).ready(function () {
       //Add btn onclick

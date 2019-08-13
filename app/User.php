@@ -16,9 +16,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'role', 'email', 'password'
     ];
 
+    protected $table = 'users';
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -42,6 +43,33 @@ class User extends Authenticatable
     */
     public function setPasswordAttribute($password) {
         $this->attributes['password'] = bcrypt($password);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_users');
+    }
+
+    /**
+     * Checks if User has access to $permissions.
+     */
+    public function hasAccess(array $permissions) : bool
+    {
+        // check if the permission is available in any role
+        foreach ($this->roles as $role) {
+            if($role->hasAccess($permissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the user belongs to role.
+     */
+    public function inRole(string $roleSlug)
+    {
+        return $this->roles()->where('slug', $roleSlug)->count() == 1;
     }
 
 }

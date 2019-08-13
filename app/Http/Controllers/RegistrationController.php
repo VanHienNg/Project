@@ -14,13 +14,13 @@ class RegistrationController extends Controller
 
     public function store() {
         $this->validate(request(), [ 
-            'name' => 'bail|required',
+            'name' => "bail|required",
             'email' => "bail|required|email",
             'password' => "bail|required",
-            'password-comfirmation' => 'bail|same:password'
+            'password-comfirmation' => "bail|same:password"
         ]);
 
-        $user = User::create(request(['name', 'email', 'password']));
+        $user = User::create(request(['name', 'email', 'role', 'password']));
 
         auth() -> login($user);
 
