@@ -39,6 +39,7 @@
 
   <!-- Page level custom scripts -->
   <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+  
 
 </head>
 
@@ -374,10 +375,10 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th style="width:10%">Id</th>
+                      <th>Id</th>
                       <th>Name</th>
                       <th>Email</th>
-                      <th>Option</th>
+                      <th colspan="3">Action</th>
                     </tr>
                   </thead>
                   <tbody id="users-crud">
@@ -386,11 +387,9 @@
                         <td>1</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td style="width:35%">
-                            <button id="edit-user" data-id="{{ $user->id }}" class="btn btn-primary" style="width:25%">Edit</button>
-                            <button id="delete-user" data-id="{{ $user->id }}" class="btn btn-danger" style="width:25%">Delete</button>
-                            <button id="show-pruduct" data-id="{{ $user->id }}" class="btn btn-primary" style="width:45%">Show product</button>
-                        </td>
+                        <td><button id="edit-user" data-id="{{ $user->id }}" class="btn btn-primary">Edit</button></td>
+                        <td><button id="delete-user" data-id="{{ $user->id }}" class="btn btn-danger">Delete</button>
+                        <td><button id="show-pruduct" data-id="{{ $user->id }}" class="btn btn-primary">Show product</button></td>
                       </tr>
                       @endforeach
                   </tbody>
@@ -430,7 +429,8 @@
   <div class="modal fade" id="ajax-crud-modal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form id="userForm" name="userForm" class="form-horizontal">
+        <form id="userForm" name="userForm" method="post" class="form-horizontal">
+        {{ csrf_field() }}
           <div class="modal-header">
               <h4 class="modal-title" id="userCrudModal"></h4>
           </div>
@@ -494,19 +494,19 @@
 
   <!-- CRUD script -->
   <script>
-    $(document).ready(function () {
-      $.ajaxSetup({
+    $.ajaxSetup({
         headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
       });
 
+    $(document).ready(function () {
       //Add btn onclick
       $('#create-new-user').click(function () {
-          $('#btn-save').val("create-user");
-          $('#userForm').trigger("reset");
-          $('#userCrudModal').html("Add New User");
-          $('#ajax-crud-modal').modal('show');
+        $('#btn-save').val("create-user");
+        $('#userForm').trigger("reset");
+        $('#userCrudModal').html("Add New User");
+        $('#ajax-crud-modal').modal('show');
       });
   
       //Delete btn onclick
@@ -526,18 +526,20 @@
     //Delete btn onclick + delete DB function
       $('body').on('click', '#delete-user', function () {
           var user_id = $(this).data("id");
-          confirm("Are You sure want to delete !");
-  
-          $.ajax({
-              type: "DELETE",
-              url: "{{ url('admin') }}"+'/'+user_id,
-              success: function (data) {
-                  $("#user_id_" + user_id).remove();
-              },
-              error: function (data) {
-                  console.log('Error:', data);
-              }
-          });
+          var choise = confirm("Are you sure want to delete?");
+
+          if(choise) {
+            $.ajax({
+                type: "DELETE",
+                url: "{{ url('admin') }}"+'/'+user_id,
+                success: function (data) {
+                    $("#user_id_" + user_id).remove();
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+          }
       });   
     });
 
@@ -549,14 +551,15 @@
           $('#btn-save').html('Sending..');
           $.ajax({
             data: $('#userForm').serialize(),
+            
             url: "{{ route('admin.store') }}",
             type: "POST",
             dataType: 'json',
             success: function (data) {
-                var user = '<tr id="user_id_' + data.id + '"><td>"1"</td><td>' + data.name + '</td><td>' + data.email + '</td>';
-                user += '<td><button href="javascript:void(0)" id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Edit</button></td>';
-                user += '<td><button href="javascript:void(0)" id="delete-user" data-id="' + data.id + '" class="btn btn-danger delete-user">Delete</button></td>';
-                user += '<td><button href="javascript:void(0)" id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
+                var user = '<tr id="user_id_' + data.id + '"><td>1</td><td>' + data.name + '</td><td>' + data.email + '</td>';
+                user += '<td><button id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Edit</button></td>';
+                user += '<td><button id="delete-user" data-id="' + data.id + '" class="btn btn-danger">Delete</button></td>';
+                user += '<td><button id="show-product" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
                 
                 if (actionType == "create-user") {
                     $('#users-crud').prepend(user);
