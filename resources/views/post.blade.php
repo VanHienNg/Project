@@ -11,7 +11,7 @@
   <meta name="author" content="">
 
   <title>Post Manager</title>
-
+  
   <!-- Custom fonts for this template -->
   <link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -21,24 +21,6 @@
 
   <!-- Custom styles for this page -->
   <link href="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
-  <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-  
-  <!-- Custom scripts for all pages-->
-  <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
 
 </head>
 
@@ -373,9 +355,12 @@
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2" id="post-paragraph" data-id="{{ $post -> id }}">
+                                        <div class="col-12 mr-2" id="post-paragraph" data-id="{{ $post -> id }}">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ $post -> title }}</div>
                                             <textarea class="h6 mb-0" readonly style="border: none;overflow: hidden;box-shadow: none">{{ $post -> body }}</textarea>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-danger" style="font-size:12px" id="delete-post" data-id="{{ $post -> id }}">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -445,7 +430,7 @@
 
                         
                     </div>
-
+                    {{ $posts -> links() }}
                 </div>
             </div>
           </div>
@@ -546,17 +531,11 @@
                 </button>
             </div>
         </form>
-        <div class="modal-footer" id="delete-paragraph">
-          <button type="" class="btn btn-danger" id="delete-post">Delete Post
-          </button>
-        </div>
       </div>
     </div>
   </div>
 
-  
-
-  <script>
+  <!-- <script>
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -651,8 +630,29 @@
       })
     });
 
-  </script>
+  </script> -->
 
+  <!-- Bootstrap core JavaScript-->
+  <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+  
+  <!-- Custom scripts for all pages-->
+  <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+  
+
+  <!-- Page level plugins -->
+  <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+
+  <!-- Page ajax scripts -->
+  <script src="{{ asset('template/js/ajax.js') }}"></script>
 </body>
 
 </html>

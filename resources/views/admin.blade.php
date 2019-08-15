@@ -22,24 +22,6 @@
   <!-- Custom styles for this page -->
   <link href="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
-  <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
-  
 
 </head>
 
@@ -394,6 +376,7 @@
                       @endforeach
                   </tbody>
                 </table>
+                {{ $users -> links() }}
               </div>
             </div>
           </div>
@@ -508,7 +491,7 @@
   </div>
 
   <!-- CRUD script -->
-  <script>
+  <!-- <script>
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -595,8 +578,28 @@
         }
       })
     });
-  </script>
+  </script> -->
+  
+  <!-- Bootstrap core JavaScript-->
+  <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
+  <!-- Core plugin JavaScript-->
+  <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+  
+  <!-- Page level ajax scripts -->
+  <script src="{{ asset('template/js/ajax.js') }}"></script>
 </body>
 
 </html>

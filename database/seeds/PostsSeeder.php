@@ -13,14 +13,14 @@ class PostsSeeder extends Seeder
      */
     public function run()
     {
-        $user1 = User::where('name', 'admin')->first();
-        $user2 = User::where('name', 'vanhien')->first();
+        $user1 = User::where('name', 'user1')->first();
+        $user2 = User::where('name', 'user2')->first();
         $faker = Faker\Factory::create();
         for ($i=0; $i < 10; $i++) { 
             $title = $faker->sentence($nbWords = 6, $variableNbWords = true);
             $post = Post::create([
                 'title' => $title, 
-                'body' => $faker->text($maxNbChars = 1000),
+                'body' => $faker->text($maxNbChars = 200),
                 'slug' => str_slug($title),
                 'published' => rand(0,1),
                 'user_id' => $user1->id
@@ -28,7 +28,7 @@ class PostsSeeder extends Seeder
             $title = $faker->sentence($nbWords = 6, $variableNbWords = true);
             $post = Post::create([
                 'title' => $title, 
-                'body' => $faker->text($maxNbChars = 1000),
+                'body' => $faker->text($maxNbChars = 200),
                 'slug' => str_slug($title),
                 'published' => rand(0,1),
                 'user_id' => $user2->id
