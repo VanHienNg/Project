@@ -25,6 +25,11 @@ Route::get('index', function() {
     return view('index');
 });
 
+//Route user product
+// Route::get('post', function() {
+//     return view('post');
+// });
+
 //Route to get static login
 // Route::get('login', function() {
 //     return view('login');
@@ -46,3 +51,6 @@ Route::get('/logout', 'SessionsController@destroy');
 
 //Route CRUD admin
 Route::resource('/admin', 'AdminController');
+
+//Route CRUD post
+Route::resource('/post', 'PostController');

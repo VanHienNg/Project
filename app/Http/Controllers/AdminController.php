@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Redirect,Response;
+use Redirect, Response;
 use App\User;
 
 class AdminController extends Controller

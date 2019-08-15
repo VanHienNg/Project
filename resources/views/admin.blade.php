@@ -381,7 +381,7 @@
                       <th colspan="3">Action</th>
                     </tr>
                   </thead>
-                  <tbody id="users-crud">
+                  <tbody id="users-latest">
                     @foreach ($users as $user)
                       <tr id="user_id_{{ $user->id }}">
                         <td>1</td>
@@ -439,14 +439,16 @@
               <div class="form-group" style="margin-top:10px">
                   <label for="name" class="col-sm-6 control-label">Name:</label>
                   <div class="col-sm-12">
-                      <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required="">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="" maxlength="50" required="">
+                    <p class="error" style="display:none"></p>
                   </div>
               </div>
 
               <div class="form-group" style="margin-top:10px">
                   <label class="col-sm-6 control-label">Email:</label>
                   <div class="col-sm-12">
-                      <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="" required="">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="" required="">
+                    <p class="error" style="display:none"></p>
                   </div>
               </div>
 
@@ -464,14 +466,16 @@
               <div class="form-group" style="margin-top:10px">
                   <label class="col-sm-6 control-label">Password:</label>
                   <div class="col-sm-12">
-                      <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="" required="">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="" required="">
+                    <p class="error" style="display:none"></p>
                   </div>
               </div>
 
               <div class="form-group" style="margin-top:10px">
                   <label class="col-sm-6 control-label">Password Confirm:</label>
                   <div class="col-sm-12">
-                      <input type="password" class="form-control" id="password-confirm" name="password-confirm" placeholder="Refill Password" value="" required="">
+                    <input type="password" class="form-control" id="password-confirm" name="password-confirm" placeholder="Refill Password" value="" required="">
+                    <p class="error" style="display:none"></p>
                   </div>
               </div>         
             </div>
@@ -513,20 +517,20 @@
 
     $(document).ready(function () {
       //Add btn onclick
-      $('#create-new-user').click(function () {
+      $('#create-new-user').click(function() {
         $('#btn-save').val("create-user");
         $('#userForm').trigger("reset");
         $('#userCrudModal').html("Add New User");
         $('#ajax-crud-modal').modal('show');
       });
   
-      //Delete btn onclick
+      //Edit btn onclick
       $('body').on('click', '#edit-user', function () {
         var user_id = $(this).data('id');
-        $.get('admin/' + user_id +'/edit', function (data) {
-          $('#userCrudModal').html("Edit User");
-            $('#btn-save').val("edit-user");
+        $.get('admin/' + user_id +'/edit', function(data) {
             $('#ajax-crud-modal').modal('show');
+            $('#userCrudModal').html("Edit User");
+            $('#btn-save').val("edit-user");
             $('#user_id').val(data.id);
             $('#name').val(data.name);
             $('#email').val(data.email);
@@ -544,12 +548,14 @@
                 type: "DELETE",
                 url: "{{ url('admin') }}"+'/'+user_id,
                 success: function (data) {
-                    $("#user_id_" + user_id).remove();
+                  $("#user_id_" + user_id).remove();
                 },
                 error: function (data) {
-                    console.log('Error:', data);
+                  console.log('Error:', data);
                 }
             });
+          } else {
+            $('#userForm').trigger('reset');
           }
       });   
     });
@@ -562,26 +568,25 @@
           $('#btn-save').html('Sending..');
           $.ajax({
             data: $('#userForm').serialize(),
-            
             url: "{{ route('admin.store') }}",
             type: "POST",
             dataType: 'json',
-            success: function (data) {
-                var user = '<tr id="user_id_' + data.id + '"><td>1</td><td>' + data.name + '</td><td>' + data.email + '</td>';
-                user += '<td><button id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Edit</button></td>';
-                user += '<td><button id="delete-user" data-id="' + data.id + '" class="btn btn-danger">Delete</button></td>';
-                user += '<td><button id="show-product" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
-                
-                if (actionType == "create-user") {
-                    $('#users-crud').prepend(user);
-                } else {
-                    $("#user_id_" + data.id).replaceWith(user);
-                }
-  
-                $('#userForm').trigger("reset");
-                $('#ajax-crud-modal').modal('hide');
-                $('#btn-save').html('Save Changes');
-              },
+            success: function(data) {
+              var user = '<tr id="user_id_' + data.id + '"><td>1</td><td>' + data.name + '</td><td>' + data.email + '</td>';
+              user += '<td><button id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Edit</button></td>';
+              user += '<td><button id="delete-user" data-id="' + data.id + '" class="btn btn-danger">Delete</button></td>';
+              user += '<td><button id="show-product" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
+              
+              if(actionType == "create-user") {
+                $('#users-latest').prepend(user);
+              } else {
+                $("#user_id_" + data.id).replaceWith(user);
+              }
+
+              $('#userForm').trigger("reset");
+              $('#ajax-crud-modal').modal('hide');
+              $('#btn-save').html('Save Changes');
+            },
             error: function (data) {
               console.log('Error:', data);
               $('#btn-save').html('Save Changes');

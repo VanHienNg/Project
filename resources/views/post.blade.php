@@ -5,11 +5,12 @@
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Product</title>
+  <title>Post Manager</title>
 
   <!-- Custom fonts for this template -->
   <link href="{{ asset('template/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -27,9 +28,10 @@
 
   <!-- Core plugin JavaScript-->
   <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
+  
   <!-- Custom scripts for all pages-->
   <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
 
   <!-- Page level plugins -->
   <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -37,6 +39,7 @@
 
   <!-- Page level custom scripts -->
   <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+
 </head>
 
 <body id="page-top">
@@ -319,7 +322,7 @@
             @if(auth() -> check())
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline" id="user-login-name" style="font-size:20px; color:#5a5d6a">{{ auth()->user()->name }}</span>
-                <img class="img-profile" style="height:40px;width:40px" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <img class="img-profile" style="height:40px;width:40px" src="{{ asset('template/img/user-icon.jpg')}}">
               </a>
             @endif
               <!-- Dropdown - User Information -->
@@ -359,30 +362,29 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Product</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                      <h1 class="h3 mb-0 text-gray-800">Posts</h1>
+                      <button class="btn btn-sm btn-primary" id="create-new-post">Add new Post</button>
                     </div>
                     <!-- Content Row -->
-                    <div class="row">
+                    <div class="row" id="post-latest">
+                        @foreach ($posts as $post)
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-4 col-md-6 mb-4" id="post_id_{{ $post -> id }}">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        <div class="col mr-2" id="post-paragraph" data-id="{{ $post -> id }}">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{ $post -> title }}</div>
+                                            <textarea class="h6 mb-0" readonly style="border: none;overflow: hidden;box-shadow: none">{{ $post -> body }}</textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        @endforeach
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -396,10 +398,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -422,10 +424,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -439,7 +441,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         
                     </div>
@@ -488,6 +490,169 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit post and Add new post Modal -->
+  <div class="modal fade" id="ajax-post-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="postForm" name="postForm" method="post" class="form-horizontal">
+        {{ csrf_field() }}
+          <div class="modal-header">
+              <h4 class="modal-title" id="postCrudModal"></h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="user_id" id="user_id">
+              <div class="form-group" style="margin-top:10px">
+                  <label for="title" class="col-sm-6 control-label">Title:</label>
+                  <div class="col-sm-12">
+                      <input style="word-break: break-all" type="text" class="form-control" id="title" name="title" placeholder="Enter post title" value="" maxlength="15" required="">
+                      <p class="error" style="display:none"></p>
+                    </div>
+              </div>
+
+              <div class="form-group" style="display:none">
+                  <div class="col-sm-12">
+                    <input id="postId" name="post_id" value="">
+                  </div>
+              </div>
+
+              <div class="form-group" style="margin-top:10px">
+                  <label for="slug" class="col-sm-6 control-label">Slug:</label>
+                  <div class="col-sm-12">
+                    <textarea style="word-break: break-all" type="text" class="form-control" id="slug" name="slug" placeholder="Enter slug" value="" maxlength="15" required=""></textarea>
+                    <p class="error" style="display:none"></p>
+                  </div>
+              </div>
+
+              <div class="form-group" style="margin-top:10px">
+                  <label for="body" class="col-sm-6 control-label">Body:</label>
+                  <div class="col-sm-12">
+                      <textarea class="form-control" rows="4" cols="50" id="body" name="body" placeholder="Enter body" value="" required=""></textarea>
+                      <p class="error" style="display:none"></p>
+                    </div>
+              </div>
+              
+              <div class="form-group" style="display:none">
+                  <div class="col-sm-12">
+                    <input id="userIdPost" name="user_id" value="{{ auth()->user()->id }}">
+                  </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="" class="btn btn-danger" id="delete-post">Delete Post
+                </button> -->
+                <button type="submit" class="btn btn-primary" id="btn-post" value="create">Save changes
+                </button>
+            </div>
+        </form>
+        <div class="modal-footer" id="delete-paragraph">
+          <button type="" class="btn btn-danger" id="delete-post">Delete Post
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+    });
+
+    $(document).ready(function() {
+      //Btn Add post click
+      $('#create-new-post').click(function() {
+        $('#postForm').trigger('reset');
+        $('#btn-post').val('create-post');
+        $('#delete-paragraph').hide();
+        $('#postCrudModal').html('Create new Post');
+        $('#ajax-post-modal').modal('show');
+      });
+
+      //Btn click on post paragraph
+      $('body').on('click', '#post-paragraph', function() {
+        var post_id = $(this).data('id');
+        $.get('post/'+ post_id +'/edit', function(data) {
+          $('#ajax-post-modal').modal('show');
+          $('#postCrudModal').html('Edit Post');
+          $('#btn-post').val("edit-post");
+          $('#delete-paragraph').show();
+          $('#postId').val(data.id);
+          $('#title').val(data.title);
+          $('#slug').val(data.slug);
+          $('#body').val(data.body);
+        })
+
+        $('#delete-post').on('click', function() {
+          var choise = confirm("Are your sure want to delete");
+          if(choise) {
+            $.ajax({
+              type: "DELETE",
+              url: "{{ url('post') }}"+'/'+post_id,
+              success: function (data) {
+                  $("#post_id_" + post_id).remove();
+              },
+              error: function (data) {
+                  console.log('Error:', data);
+              }
+            });
+            $('#ajax-post-modal').modal('hide');
+          }
+        });
+      });
+
+    });
+
+    
+
+    //Save post function
+    $(function() {
+      $('#postForm').validate({
+        submitHandler: function(form) {
+          var actionType = $('#btn-post').val();
+          $.ajax({
+            data: $('#postForm').serialize(),
+            url: "{{ route('post.store') }}",
+            type: "POST",
+            dataType: 'json',
+            success: function(data) {
+              var post = '<div class="col-xl-4 col-md-6 mb-4" id="post_id_'+ data.id +'">';
+              post +=       '<div class="card border-left-primary shadow h-100 py-2">';
+              post +=         '<div class="card-body">';
+              post +=           '<div class="row no-gutters align-items-center">';
+              post +=             '<div class="col mr-2" id="post-paragraph">';
+              post +=                '<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">'+ data.title +'</div>';
+              post +=                '<textarea class="h6 mb-0" readonly style="border: none;overflow: hidden;box-shadow: none">'+ data.body +'</textarea>';
+              post +=               '</div>'
+              post +=             '</div>'
+              post +=           '</div>'
+              post +=        '</div>'
+              post +=     '</div>'
+
+              if(actionType == "create-post") {
+                $('#post-latest').prepend(post);
+              } else {
+                $("#post_id_" + data.id).replaceWith(post);
+              }
+
+              $('#ajax-post-modal').modal('hide');
+              $('#btn-post').html('Save changes');
+            },
+            error: function(data) {
+              console.log('Error:', data);
+              $('#btn-post').html('Save changes');
+            }
+          });
+        }
+      })
+    });
+
+  </script>
+
 </body>
 
 </html>
