@@ -51,6 +51,8 @@ Route::get('/logout', 'SessionsController@destroy');
 
 //Route CRUD admin
 Route::resource('/admin', 'AdminController');
+Route::post('/admin/search', 'AdminController@search');
 
 //Route CRUD post
 Route::resource('/post', 'PostController');
+Route::post('/post/search', 'PostController@search');

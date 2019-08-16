@@ -97,8 +97,21 @@ class AdminController extends Controller
     public function destroy($id)
     {   
         $user = User::where('id',$id)->delete();
-        
     
         return Response::json($user);
+    }
+
+    /*Live search */
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $search = $request->get('search');
+            $users = User::where('name', 'LIKE', '%'.$search.'%')->get();
+            $data = view('user-row', ['users' => $users])->render();
+            return response()->json([
+                'error' => false,
+                'html' => $data,
+            ]);
+        }
     }
 }

@@ -101,4 +101,18 @@ class PostController extends Controller
 
         return Response::json($post);
     }
+
+    /*Live search */
+    public function search(Request $request)
+    {
+        if($request->ajax()) {
+            $search = $request->get('search');
+            $posts = Post::where('title', 'LIKE', '%'.$search.'%')->get();
+            $data = view('post-paragraph', ['posts' => $posts])->render();
+            return response()->json([
+                'error' => false,
+                'html' => $data,
+            ]);
+        }
+    }
 }
