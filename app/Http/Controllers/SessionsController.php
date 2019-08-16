@@ -21,7 +21,7 @@ class SessionsController extends Controller
             if($user == "admin") {
                 return redirect() -> to('/admin');
             } else {
-                return redirect() -> to('/index');
+                return redirect() -> to('/post');
             }
         }
     }

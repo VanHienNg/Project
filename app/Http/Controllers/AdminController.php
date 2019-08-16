@@ -114,4 +114,9 @@ class AdminController extends Controller
             ]);
         }
     }
+    /*Route accessing*/ 
+    // public function __construct() {
+
+    // }
+    
 }

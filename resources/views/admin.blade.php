@@ -35,14 +35,6 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">SB Admin</div>
-            </a>
-
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
@@ -299,26 +291,30 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  </div>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+  
+  <!-- Bootstrap core JavaScript-->
+  <script src="{{ asset('template/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('template/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="{{ asset('template/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="{{ asset('template/js/sb-admin-2.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+  <!-- Page level plugins -->
+  <script src="{{ asset('template/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('template/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-    <!-- Page level ajax scripts -->
-    <script src="{{ asset('template/js/ajax.js') }}"></script>
+  <!-- Page level custom scripts -->
+  <script src="{{ asset('template/js/demo/datatables-demo.js') }}"></script>
+  
+  <!-- Page level ajax scripts -->
+  <script src="{{ asset('template/js/ajax.js') }}"></script>
+
 </body>
 
 </html>
