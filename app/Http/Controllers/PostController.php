@@ -108,7 +108,7 @@ class PostController extends Controller
         if($request->ajax()) {
             $search = $request->get('search');
             $posts = Post::where('title', 'LIKE', '%'.$search.'%')->get();
-            $data = view('post-paragraph', ['posts' => $posts])->render();
+            $data = view('elements.post-paragraph', ['posts' => $posts])->render();
             return response()->json([
                 'error' => false,
                 'html' => $data,

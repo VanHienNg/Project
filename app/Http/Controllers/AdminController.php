@@ -71,7 +71,7 @@ class AdminController extends Controller
     public function edit($id)
     {
         $where = array('id' => $id);
-        $user  = User::where($where)->first();
+        $user  = User::where($where) -> first();
  
         return Response::json($user);
     }
@@ -96,7 +96,7 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {   
-        $user = User::where('id',$id)->delete();
+        $user = User::where('id',$id) -> delete();
     
         return Response::json($user);
     }
@@ -104,19 +104,15 @@ class AdminController extends Controller
     /*Live search */
     public function search(Request $request)
     {
-        if($request->ajax()) {
-            $search = $request->get('search');
-            $users = User::where('name', 'LIKE', '%'.$search.'%')->get();
-            $data = view('user-row', ['users' => $users])->render();
-            return response()->json([
-                'error' => false,
+        if($request -> ajax()) {
+            $search = $request -> get('search');
+            $users = User::where('name', 'LIKE', '%'.$search.'%') -> get();
+            $data = view('elements.user-row', ['users' => $users]) -> render();
+            return response() -> json([
                 'html' => $data,
             ]);
         }
     }
-    /*Route accessing*/ 
-    // public function __construct() {
-
-    // }
+    
     
 }

@@ -8,10 +8,12 @@
                     <textarea class="h6 mb-0" readonly
                         style="border: none;overflow: hidden;box-shadow: none">{{ $post -> body }}</textarea>
                 </div>
+                @if(auth()->check())
                 <div class="col-12">
                     <button class="btn btn-danger" style="font-size:12px" id="delete-post"
                         data-id="{{ $post -> id }}">Delete</button>
                 </div>
+                @endif
             </div>
         </div>
     </div>

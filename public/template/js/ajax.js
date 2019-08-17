@@ -51,6 +51,9 @@ $(document).ready(function () {
     });
     $('#search-post').on('keyup', function () {
         $value = $(this).val();
+        if($value == '') {
+            window.location.reload();
+        };
         $.ajax({
             type: 'post',
             url: "/post/search",
@@ -110,7 +113,7 @@ $(function () {
 });
 
 
-//Amin ajax 
+//Admin ajax 
 $(document).ready(function () {
     $.ajaxSetup({
         headers: {
@@ -163,6 +166,9 @@ $(document).ready(function () {
     //Live search user
     $('#search-user').on('keyup', function () {
         $value = $(this).val();
+        if($value == '') {
+            window.location.reload();
+        };
         $.ajax({
             type: 'post',
             url: "/admin/search",
@@ -196,6 +202,7 @@ $(function () {
 
                     if (actionType == "create-user") {
                         $('#users-latest').prepend(user);
+                        window.location.reload();
                     } else {
                         $("#user_id_" + data.id).replaceWith(user);
                     }
@@ -211,4 +218,25 @@ $(function () {
             });
         }
     })
+});
+
+//Index view ajax
+$(document).ready(function() {
+    //search
+    $('#search-post-list').on('keyup', function () {
+        $value = $(this).val();
+        if($value == '') {
+            window.location.reload();
+        };
+        $.ajax({
+            type: 'post',
+            url: "/post/search",
+            data: {
+                'search': $value
+            },
+            success: function (data) {
+                $('#post-list').html(data.html);
+            }
+        });
+    });
 });

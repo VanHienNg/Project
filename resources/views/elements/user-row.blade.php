@@ -1,6 +1,6 @@
 @foreach ($users as $user)
 <tr id="user_id_{{ $user->id }}">
-    <td>1</td>
+    <td>{{ $loop->index +1 }}</td>
     <td>{{ $user->name }}</td>
     <td>{{ $user->email }}</td>
     <td><button id="edit-user" data-id="{{ $user->id }}"
