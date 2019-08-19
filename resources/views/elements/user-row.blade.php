@@ -7,7 +7,7 @@
             class="btn btn-primary">Edit</button></td>
     <td><button id="delete-user" data-id="{{ $user->id }}"
             class="btn btn-danger">Delete</button>
-    <td><button id="show-pruduct" data-id="{{ $user->id }}"
-            class="btn btn-primary">Show product</button></td>
+    <td><button id="show-post" data-id="{{ $user->id }}"
+            class="btn btn-success">Show product</button></td>
 </tr>
 @endforeach

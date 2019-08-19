@@ -73,7 +73,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid user-list">
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Staffs</h1>
@@ -85,16 +85,19 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <div class="row">
-                                <div class="col-6 form-group">
+                                <div class="col-6 form-group" id="search-form-user">
                                     <label id="search-bar-user" for="search">Search: </label>
                                     <input type="text" class="form-controller" id="search-user" name="search">
+                                </div>
+                                <div class="col-6 text-left" style="display:none" id="back-user-bar">
+                                    <button class="btn btn-success" id="back-user-list">Back to User List</button>
                                 </div>
                                 <div class="col-6 text-right">
                                     <button class="btn btn-primary" id="create-new-user">Add Staff</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body row" id="admin-content">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
@@ -113,7 +116,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 
@@ -157,7 +159,9 @@
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
                                     value="" maxlength="50" required="">
-                                <p class="error" style="display:none"></p>
+                                @if ($errors->has('name'))
+                                <span class="text-danger">{{ $errors->first('name') }}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -166,7 +170,9 @@
                             <div class="col-sm-12">
                                 <input type="email" class="form-control" id="email" name="email"
                                     placeholder="Enter Email" value="" required="">
-                                <p class="error" style="display:none"></p>
+                                @if ($errors->has('email'))
+                                <span class="text-danger lol">{{ $errors->first('email') }}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -179,6 +185,9 @@
                                     <option value="staff">Staff</option>
                                     <option value="admin">Admin</option>
                                 </select>
+                                @if ($errors->has('role'))
+                                <span class="text-danger">{{ $errors->first('role') }}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -187,7 +196,9 @@
                             <div class="col-sm-12">
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" value="" required="">
-                                <p class="error" style="display:none"></p>
+                                @if ($errors->has('password'))
+                                <span class="text-danger">{{ $errors->first('password') }}</span>
+                                @endif
                             </div>
                         </div>
 
@@ -196,7 +207,9 @@
                             <div class="col-sm-12">
                                 <input type="password" class="form-control" id="password-confirm"
                                     name="password-confirm" placeholder="Refill Password" value="" required="">
-                                <p class="error" style="display:none"></p>
+                                @if ($errors->has('password-confirm'))
+                                <span class="text-danger">{{ $errors->first('password-confirm') }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>

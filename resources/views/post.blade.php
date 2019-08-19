@@ -156,10 +156,12 @@
                                     <div class="form-group" style="margin-top:10px">
                                         <label for="title" class="col-sm-6 control-label">Title:</label>
                                         <div class="col-sm-12">
-                                            <input style="word-break: break-all" type="text" class="form-control"
+                                            <input style="width:100%; word-break:break-all" type="text" class="form-control"
                                                 id="title" name="title" placeholder="Enter post title" value=""
                                                 maxlength="15" required="">
-                                            <p class="error" style="display:none"></p>
+                                            @if ($errors->has('title'))
+                                            <span class="text-danger">{{ $errors->first('title') }}</span>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -172,19 +174,23 @@
                                     <div class="form-group" style="margin-top:10px">
                                         <label for="slug" class="col-sm-6 control-label">Slug:</label>
                                         <div class="col-sm-12">
-                                            <textarea style="word-break: break-all" type="text" class="form-control"
+                                            <textarea style="width:100%; word-break: break-all" type="text" class="form-control"
                                                 id="slug" name="slug" placeholder="Enter slug" value="" maxlength="15"
                                                 required=""></textarea>
-                                            <p class="error" style="display:none"></p>
+                                            @if ($errors->has('slug'))
+                                            <span class="text-danger">{{ $errors->first('slug') }}</span>
+                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="form-group" style="margin-top:10px">
                                         <label for="body" class="col-sm-6 control-label">Body:</label>
                                         <div class="col-sm-12">
-                                            <textarea class="form-control" rows="4" cols="50" id="body" name="body"
+                                            <textarea style="width:100%" class="form-control" rows="4" cols="50" id="body" name="body"
                                                 placeholder="Enter body" value="" required=""></textarea>
-                                            <p class="error" style="display:none"></p>
+                                            @if ($errors->has('body'))
+                                            <span class="text-danger">{{ $errors->first('body') }}</span>
+                                            @endif
                                         </div>
                                     </div>
 

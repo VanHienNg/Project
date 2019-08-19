@@ -18,3 +18,5 @@
     
     <!-- Page level ajax scripts -->
     <script src="{{ asset('template/js/ajax.js') }}"></script>
+
+    

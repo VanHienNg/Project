@@ -52,11 +52,20 @@
                   </div>
                   <form class="user" method="post" action="/login">
                     {{ csrf_field() }}
+                    @if ($errors->has('message'))
+                    <span class="text-danger">{{ $errors->first('message') }}</span>
+                    @endif
                     <div class="form-group">
                       <input type="text" class="form-control form-control-user" id="user-name" name="name" placeholder="Enter Your Username...">
+                      @if ($errors->has('name'))
+                      <span class="text-danger">{{ $errors->first('name') }}</span>
+                      @endif
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control form-control-user" id="user-password" name="password" placeholder="Password">
+                      @if ($errors->has('password'))
+                      <span class="text-danger">{{ $errors->first('password') }}</span>
+                      @endif
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small">
@@ -67,21 +76,10 @@
                     <button type="submit" class="btn btn-primary btn-user btn-block">
                       Login
                     </button>
-                    <!-- <hr> -->
-                    <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
-                      <i class="fab fa-google fa-fw"></i> Login with Google
-                    </a>
-                    <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                      <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                    </a> -->
-                    
                   </form>
-                  <!-- <hr> -->
-                  <!-- <div class="text-center">
-                    <a class="small" href="forgot-password.html">Forgot Password?</a>
-                  </div> -->
                   <div class="text-center">
-                    <a class="small" href="register.html">Create an Account!</a>
+
+                    <a class="small" href="/register">Create an Account!</a>
                   </div>
                 </div>
               </div>

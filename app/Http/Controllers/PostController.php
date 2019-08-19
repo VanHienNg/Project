@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use Redirect, Response;
 use App\Post;
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data['posts'] = Post::orderBy('id','desc')->paginate(9);
+        $data = Post::getPosts();
 
         return view('/post', $data);
     }
@@ -36,20 +37,11 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $postId = $request->post_id;
-        $post = Post::updateOrCreate(
-                    ['id' => $postId],
-                    [
-                        'title' => $request->title,
-                        'slug' => $request->slug,
-                        'body' => $request->body,
-                        'user_id' => $request->user_id
-                    ]
-                );
-        return Response::json($post);
+        $data = Post::storePosts($request);
 
+        return $data;
     }
 
     /**
@@ -97,22 +89,16 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::where('id', $id)->delete();
+        $data = Post::deletePosts($id);
 
-        return Response::json($post);
+        return $data;
     }
 
     /*Live search */
     public function search(Request $request)
     {
-        if($request->ajax()) {
-            $search = $request->get('search');
-            $posts = Post::where('title', 'LIKE', '%'.$search.'%')->get();
-            $data = view('elements.post-paragraph', ['posts' => $posts])->render();
-            return response()->json([
-                'error' => false,
-                'html' => $data,
-            ]);
-        }
+        $data = Post::searchPosts($request);
+
+        return $data;
     }
 }

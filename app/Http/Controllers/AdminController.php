@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Redirect, Response;
 use App\User;
@@ -15,8 +16,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $data['users'] = User::orderBy('id','desc')->paginate(8);
-   
+        $data = User::getUsers();
         return view('/admin', $data);
     }
 
@@ -36,18 +36,9 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $userId = $request->user_id;
-        $user = User::updateOrCreate(['id' => $userId],
-                        [
-                            'name' => $request->name, 
-                            'email' => $request->email,
-                            'role' => $request->role,
-                            'password' => $request->password
-                        ]
-                    );
-    
+        $user = User::storeUsers($request);
         return Response::json($user);
     }
 
@@ -57,9 +48,10 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $data = User::showPostsUser($request);
+        return $data;
     }
 
     /**
@@ -70,10 +62,9 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $where = array('id' => $id);
-        $user  = User::where($where) -> first();
+        $user = User::editUsers($id);
  
-        return Response::json($user);
+        return $user;
     }
 
     /**
@@ -96,23 +87,16 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {   
-        $user = User::where('id',$id) -> delete();
+        $user = User::deleteUsers($id);
     
-        return Response::json($user);
+        return $user;
     }
 
     /*Live search */
     public function search(Request $request)
     {
-        if($request -> ajax()) {
-            $search = $request -> get('search');
-            $users = User::where('name', 'LIKE', '%'.$search.'%') -> get();
-            $data = view('elements.user-row', ['users' => $users]) -> render();
-            return response() -> json([
-                'html' => $data,
-            ]);
-        }
+        $data = User::searchUsers($request);
+
+        return $data;
     }
-    
-    
 }

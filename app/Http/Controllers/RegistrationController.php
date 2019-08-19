@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegistrationRequest;
 use Illuminate\Http\Request;
 use App\User;
 
@@ -11,16 +12,9 @@ class RegistrationController extends Controller
         return view('register');
     }
 
-
-    public function store() {
-        $this->validate(request(), [ 
-            'name' => "bail|required",
-            'email' => "bail|required|email",
-            'password' => "bail|required",
-            'password-comfirmation' => "bail|same:password"
-        ]);
-
-        $user = User::create(request(['name', 'email', 'role', 'password']));
+    public function store(RegistrationRequest $request) {
+        $input = $request -> all();
+        $user = User::create($input);
 
         auth() -> login($user);
 

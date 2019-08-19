@@ -16,9 +16,9 @@ class CheckUser
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()-role('admin') && $request->is('/admin')) {
+        if(Auth::user()->role == 'admin' && $request->is('/admin')) {
             return $next($request);
-        } else{
+        } else {
             return redirect()->back();
         }
     }

@@ -36,18 +36,17 @@ Route::post('/index/search', 'IndexController@search');
 
 //Route CRUD admin
 Route::post('/admin/search', 'AdminController@search');
+Route::post('/admin/show', 'AdminController@show');
 
 //Route CRUD post
 Route::post('/post/search', 'PostController@search');
 
 //Route access + CRUD admin
-Route::group(['middleware' => 'checklogin'], function () {
-    Route::resource('/admin', 'AdminController');
-});
-
 //Route access + CRUD post
 Route::group(['middleware' => 'checklogin'], function () {
+    Route::resource('/admin', 'AdminController');
     Route::resource('/post', 'PostController');
 });
+
 
 

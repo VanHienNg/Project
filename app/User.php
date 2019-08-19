@@ -45,31 +45,65 @@ class User extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
-    public function roles()
+    public function post()
     {
-        return $this->belongsToMany(Role::class, 'role_users');
+        return $this->hasMany('App\Post', 'user_id', 'id');
     }
-
     /**
      * Checks if User has access to $permissions.
      */
-    public function hasAccess(array $permissions) : bool
-    {
-        // check if the permission is available in any role
-        foreach ($this->roles as $role) {
-            if($role->hasAccess($permissions)) {
-                return true;
-            }
+    
+    public static function getUsers() {
+        $data['users'] = User::orderBy('id','desc')->paginate(8);
+
+        return $data;
+    }
+
+    public static function storeUsers($request) {
+        $userId = $request->user_id;
+        $user = User::updateOrCreate(['id' => $userId],
+                        [
+                            'name' => $request->name, 
+                            'email' => $request->email,
+                            'role' => $request->role,
+                            'password' => $request->password
+                        ]
+                    );
+        return $user;
+    }
+
+    public static function showPostsUser($request) {
+        if($request -> ajax()) {
+            $user_id = $request->get('id');
+            $post = User::findOrFail($user_id)->post()->get();
+            $data = view('elements.post-paragraph', ['posts' => $post]) -> render();
+            return response()->json([
+                'html' => $data,
+            ]);
         }
-        return false;
     }
 
-    /**
-     * Checks if the user belongs to role.
-     */
-    public function inRole(string $roleSlug)
-    {
-        return $this->roles()->where('slug', $roleSlug)->count() == 1;
+    public static function editUsers($id) {
+        $where = array('id' => $id);
+        $user  = User::where($where) -> first();
+ 
+        return Response::json($user);
     }
 
+    public static function deleteUsers($id) {
+        $user = User::where('id',$id) -> delete();
+    
+        return Response::json($user);
+    }
+
+    public static function searchUsers($request) {
+        if($request -> ajax()) {
+            $search = $request -> get('search');
+            $users = User::where('name', 'LIKE', '%'.$search.'%') -> get();
+            $data = view('elements.user-row', ['users' => $users]) -> render();
+            return response() -> json([
+                'html' => $data,
+            ]);
+        }
+    }
 }

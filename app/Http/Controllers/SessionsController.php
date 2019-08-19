@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\SessionRequest;
 
 class SessionsController extends Controller
 {
@@ -11,8 +12,9 @@ class SessionsController extends Controller
         return view('/login');
     }
 
-    public function store() {
-        if(auth() -> attempt(request(['name', 'password'])) == false) {
+    public function store(SessionRequest $request) {
+        $user = $request->only('name', 'password');
+        if(auth() -> attempt($user) == false) {
             return back() -> withErrors([
                 'message' => 'Password or Username is incorrect' 
             ]);

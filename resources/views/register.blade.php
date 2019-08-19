@@ -51,14 +51,17 @@
                 <div class="form-group row">
                   <div class="col-sm-12 mb-3 mb-sm-0">
                     <input type="text" class="form-control form-control-user" id="name" name="name" placeholder="User Name">
+                    @if ($errors->has('name'))
+                    <span class="text-danger">{{ $errors->first('name') }}</span>
+                    @endif
                   </div>
-                  <!-- <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Last Name">
-                  </div> -->
                 </div>
 
                 <div class="form-group">
                   <input type="email" class="form-control form-control-user" id="email" name="email" placeholder="Email Address">
+                  @if ($errors->has('email'))
+                  <span class="text-danger">{{ $errors->first('email') }}</span>
+                  @endif
                 </div>
 
                 <div class="form-group" style="display:none">
@@ -68,29 +71,24 @@
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
+                    @if ($errors->has('password'))
+                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                    @endif
                   </div>
                   <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user" id="password-comfirm" name="password-comfirmation" placeholder="Repeat Password">
+                    <input type="password" class="form-control form-control-user" id="password-comfirm" name="password-comfirm" placeholder="Repeat Password">
+                    @if ($errors->has('password-comfirm'))
+                    <span class="text-danger">{{ $errors->first('password-comfirm') }}</span>
+                    @endif
                   </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-user btn-block">
                   Register Account
                 </button>
-                <!-- <hr>
-                <a href="index.html" class="btn btn-google btn-user btn-block">
-                  <i class="fab fa-google fa-fw"></i> Register with Google
-                </a>
-                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                  <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                </a> -->
               </form>
-              <!-- <hr> -->
-              <!-- <div class="text-center">
-                <a class="small" href="forgot-password.html">Forgot Password?</a>
-              </div> -->
               <div class="text-center">
-                <a class="small" href="login.html">Already have an account? Login!</a>
+                <a class="small" href="/login">Already have an account? Login!</a>
               </div>
             </div>
           </div>

@@ -8,7 +8,8 @@ $(document).ready(function () {
 
     //Btn Add post click
     $('#create-new-post').click(function () {
-        $('#postForm').trigger('reset');
+        $('.lol').hide();
+        $('#postForm').trigger("reset");
         $('#btn-post').val('create-post');
         $('#delete-paragraph').hide();
         $('#postCrudModal').html('Create new Post');
@@ -17,6 +18,8 @@ $(document).ready(function () {
 
     //Btn click on post paragraph
     $('body').on('click', '#post-paragraph', function () {
+      
+        $('#postForm').trigger("reset");
         var post_id = $(this).data('id');
         $.get('post/' + post_id + '/edit', function (data) {
             $('#ajax-post-modal').modal('show');
@@ -175,11 +178,31 @@ $(document).ready(function () {
             data: {
                 'search': $value
             },
-            success: function (data) {
-                console.log(data);
+            success: function(data) {
                 $('#users-latest').html(data.html);
             }
         });
+    });
+
+    //Show post btn
+    $('body').on('click', '#show-post', function() {
+        var user_id = $(this).data("id");
+        $.ajax({
+            type: 'post',
+            url: '/admin/show',
+            data: {
+                'id': user_id
+            },
+            success: function(data) {
+                $('#admin-content').html(data.html);
+                $('#back-user-bar').show();
+                $('#search-form-user').hide();
+            }
+        });
+    });
+
+    $('body').on('click', '#back-user-list', function() {
+        window.location.reload();
     });
 });
 
@@ -192,13 +215,13 @@ $(function () {
             $.ajax({
                 data: $('#userForm').serialize(),
                 url: "/admin",
-                type: "POST",
+                type: "post",
                 dataType: 'json',
                 success: function (data) {
                     var user = '<tr id="user_id_' + data.id + '"><td>1</td><td>' + data.name + '</td><td>' + data.email + '</td>';
                     user += '<td><button id="edit-user" data-id="' + data.id + '" class="btn btn-primary">Edit</button></td>';
                     user += '<td><button id="delete-user" data-id="' + data.id + '" class="btn btn-danger">Delete</button></td>';
-                    user += '<td><button id="show-product" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
+                    user += '<td><button id="show-post" data-id="' + data.id + '" class="btn btn-primary">Show Product</button></td></tr>';
 
                     if (actionType == "create-user") {
                         $('#users-latest').prepend(user);
@@ -229,7 +252,7 @@ $(document).ready(function() {
             window.location.reload();
         };
         $.ajax({
-            type: 'post',
+            type: 'POST',
             url: "/post/search",
             data: {
                 'search': $value
