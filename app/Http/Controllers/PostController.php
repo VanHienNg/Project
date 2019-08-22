@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data = Post::getPosts();
+        $data = Post::getPosts(1);
 
         return view('/post', $data);
     }
@@ -98,7 +98,7 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $data = Post::searchPosts($request);
-
+        
         return $data;
     }
 }

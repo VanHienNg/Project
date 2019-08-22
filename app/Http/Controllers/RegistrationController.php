@@ -13,12 +13,7 @@ class RegistrationController extends Controller
     }
 
     public function store(RegistrationRequest $request) {
-        $input = $request -> all();
-        $user = User::create($input);
-
-        auth() -> login($user);
-
-        return redirect() -> to('/index');
+        return User::registrationUser($request);
     }
     
 }

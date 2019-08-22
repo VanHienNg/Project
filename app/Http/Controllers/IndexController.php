@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
+use App\FeedBack;
 use App\Post;
 
 class IndexController extends Controller
 {
     public function index() 
     {
-        $data['posts'] = Post::orderBy('id', 'desc') -> paginate(9);
-
+        $data = Post::getPosts(0);
+         
         return view('/index', $data);
     }
 
     public function search(Request $request) 
     {
-        if($request -> ajax()) {
-            $search = $request -> get('search');
-            $posts = Post::where('title', 'LIKE', '%'.$search.'%') -> get();
-            $data = view('elements.post-paragraph', ['posts' => $posts]) -> render();
-            return response() -> json([
-                'html' => $data,
-            ]);
-        };
+        return Post::searchPosts($request);
+    }
+
+    public function store(Request $request)
+    {
+        return FeedBack::saveFeedback($request);
     }
 }

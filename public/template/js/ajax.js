@@ -8,7 +8,8 @@ $(document).ready(function () {
 
     //Btn Add post click
     $('#create-new-post').click(function () {
-        $('.lol').hide();
+        var validator = $ ('#postForm').validate(); 
+        validator.resetForm(); 
         $('#postForm').trigger("reset");
         $('#btn-post').val('create-post');
         $('#delete-paragraph').hide();
@@ -18,7 +19,8 @@ $(document).ready(function () {
 
     //Btn click on post paragraph
     $('body').on('click', '#post-paragraph', function () {
-      
+        var validator = $('#postForm'). validate(); 
+        validator.resetForm(); 
         $('#postForm').trigger("reset");
         var post_id = $(this).data('id');
         $.get('post/' + post_id + '/edit', function (data) {
@@ -52,21 +54,28 @@ $(document).ready(function () {
             $('#ajax-post-modal').modal('hide');
         }
     });
+
+    //Live search post
     $('#search-post').on('keyup', function () {
-        $value = $(this).val();
-        if($value == '') {
+        var value = $(this).val();
+        var user_id = $('.post-item').data("id");
+        if(value == '') {
             window.location.reload();
-        };
-        $.ajax({
-            type: 'post',
-            url: "/post/search",
-            data: {
-                'search': $value
-            },
-            success: function (data) {
-                $('#post-latest').html(data.html);
+        } else {
+            if(user_id != undefined) {
+                $.ajax({
+                    type: 'post',
+                    url: "/post/search",
+                    data: {
+                        'search': value,
+                        'user_id': user_id
+                    },
+                    success: function (data) {
+                        $('#post-latest').html(data.html);
+                    }
+                });
             }
-        });
+        };
     })
 });
 
@@ -81,21 +90,21 @@ $(function () {
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-                    var post = '<div class="col-xl-4 col-md-6 mb-4" id="post_id_' + data.id + '">';
-                    post += '<div class="card border-left-primary shadow h-100 py-2">';
-                    post += '<div class="card-body">';
-                    post += '<div class="row no-gutters align-items-center">';
-                    post += '<div class="col-12 mr-2" id="post-paragraph" data-id="' + data.id + '">';
-                    post += '<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">' + data.title + '</div>';
-                    post += '<textarea class="h6 mb-0" readonly style="border: none;overflow: hidden;box-shadow: none">' + data.body + '</textarea>';
-                    post += '</div>'
-                    post += '</div>'
-                    post += '<div class="col-12">'
-                    post += '<button class="btn btn-danger" style="font-size:12px" id="delete-post" data-id="' + data.id + '">Delete</button>';
-                    post += '</div>'
-                    post += '</div>'
-                    post += '</div>'
-                    post += '</div>'
+                    var post =     '<div class="col-xl-4 col-md-6 mb-4" id="post_id_' + data.id + '">';
+                    post +=           '<div class="card border-left-primary shadow h-100 py-2">';
+                    post +=             '<div class="card-body">';
+                    post +=                 '<div class="row no-gutters align-items-center">';
+                    post +=                     '<div class="col-12 mr-2" id="post-paragraph" data-id="' + data.id + '">';
+                    post +=                         '<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">' + data.title + '</div>';
+                    post +=                             '<textarea class="h6 mb-0" readonly style="border: none;overflow: hidden;box-shadow: none">' + data.body + '</textarea>';
+                    post +=                         '</div>'
+                    post +=                     '</div>'
+                    post +=                     '<div class="col-12">'
+                    post +=                         '<button class="btn btn-danger" style="font-size:12px" id="delete-post" data-id="' + data.id + '">Delete</button>';
+                    post +=                     '</div>'
+                    post +=                 '</div>'
+                    post +=             '</div>'
+                    post +=         '</div>'
 
                     if (actionType == "create-post") {
                         $('#post-latest').prepend(post);
@@ -123,8 +132,12 @@ $(document).ready(function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
     });
+
     //Add btn onclick
     $('#create-new-user').click(function () {
+        var validator = $('#userForm').validate(); 
+        validator.resetForm(); 
+        $('.error-alert').remove();
         $('#btn-save').val("create-user");
         $('#userForm').trigger("reset");
         $('#userCrudModal').html("Add New User");
@@ -133,7 +146,10 @@ $(document).ready(function () {
 
     //Edit btn onclick
     $('body').on('click', '#edit-user', function () {
+        var validator = $('#userForm').validate(); 
+        validator.resetForm(); 
         var user_id = $(this).data('id');
+        console.log(user_id);
         $.get('admin/' + user_id + '/edit', function (data) {
             $('#ajax-crud-modal').modal('show');
             $('#userCrudModal').html("Edit User");
@@ -168,15 +184,15 @@ $(document).ready(function () {
 
     //Live search user
     $('#search-user').on('keyup', function () {
-        $value = $(this).val();
-        if($value == '') {
+        var value = $(this).val();
+        if(value == '') {
             window.location.reload();
         };
         $.ajax({
             type: 'post',
             url: "/admin/search",
             data: {
-                'search': $value
+                'search': value
             },
             success: function(data) {
                 $('#users-latest').html(data.html);
@@ -245,21 +261,49 @@ $(function () {
 
 //Index view ajax
 $(document).ready(function() {
-    //search
+    //Search post
     $('#search-post-list').on('keyup', function () {
-        $value = $(this).val();
-        if($value == '') {
+        var value = $(this).val();
+        if(value == '') {
             window.location.reload();
         };
         $.ajax({
-            type: 'POST',
-            url: "/post/search",
+            type: 'post',
+            url: "/index/search",
             data: {
-                'search': $value
+                'search': value
             },
             success: function (data) {
                 $('#post-list').html(data.html);
             }
         });
+    });
+
+    //Feedback btn
+    $('.feedback-btn').click(function() {
+        var fb = $(this).val();
+        var post_id = $(this).data("id");
+        $.ajax({
+            type: 'post',
+            url: "/index/store",
+            data: {
+                'feedback': fb,
+                'post_id': post_id
+            },
+            success: function () {
+                if(fb == 0) {
+                    var val = $('#dislike-'+post_id).attr('value');
+                    val++;
+                    var btn = '<label class="fb-value" id="dislike-'+post_id+'" for="dislike-btn" value="'+val+'">'+val+'</label>';
+                    $('#dislike-'+post_id).replaceWith(btn);
+                } else {
+                    var val = $('#like-'+post_id).attr('value');
+                    val++;
+                    var btn = '<label class="fb-value" id="like-'+post_id+'" for="like-btn" value="'+val+'">'+val+'</label>';
+                    $('#like-'+post_id).replaceWith(btn);
+                }
+            }
+        });
+        
     });
 });

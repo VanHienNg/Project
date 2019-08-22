@@ -2,9 +2,11 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Redirect, Response;
 
 class User extends Authenticatable
 {
@@ -48,6 +50,11 @@ class User extends Authenticatable
     public function post()
     {
         return $this->hasMany('App\Post', 'user_id', 'id');
+    }
+
+    public function feedback()
+    {
+        return $this->hasMany('App\FeedBack', 'user_id', 'id');
     }
     /**
      * Checks if User has access to $permissions.
@@ -105,5 +112,31 @@ class User extends Authenticatable
                 'html' => $data,
             ]);
         }
+    }
+
+    public static function checkLogin($request) {
+        $user = $request->only('name', 'password');
+        if(auth() -> attempt($user) == false) {
+            return back() -> withErrors([
+                'message' => 'Password or Username is incorrect' 
+            ]);
+        } else {
+            return redirect() -> to('/index');
+        }
+    }
+
+    public static function checkLogout() {
+        auth() -> logout();
+
+        return redirect() -> to('/index');
+    }
+
+    public static function registrationUser($request) {
+        $input = $request -> all();
+        $user = User::create($input);
+
+        auth() -> login($user);
+
+        return redirect() -> to('/index');
     }
 }

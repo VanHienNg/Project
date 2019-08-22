@@ -18,7 +18,7 @@ class CheckLogout
     {
         if(Auth::check()) 
         {
-        return redirect()->back();
+            return redirect() -> back() -> with('status', 'You must log out before performing this action!');
         }
         else {
             return $next($request);

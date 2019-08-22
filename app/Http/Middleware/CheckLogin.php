@@ -17,9 +17,17 @@ class CheckLogin
     public function handle($request, Closure $next)
     {
         if(Auth::check()) {
-            return $next($request);
+            if(Auth::user()->role == 'admin') {
+                return $next($request);
+            } else { 
+                if(request()->is('admin')) {
+                    return redirect() -> back() -> with('status', 'You are not allowed to access this page');
+                } else {
+                    return $next($request);
+                }
+            }
         } else {
-            return redirect('/login');
+            return redirect('/login') -> with('status', 'You must log in before performing this action!');
         }
     }
 }

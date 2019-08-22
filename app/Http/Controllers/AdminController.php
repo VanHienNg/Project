@@ -50,8 +50,7 @@ class AdminController extends Controller
      */
     public function show(Request $request)
     {
-        $data = User::showPostsUser($request);
-        return $data;
+        return User::showPostsUser($request);
     }
 
     /**
@@ -61,10 +60,8 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        $user = User::editUsers($id);
- 
-        return $user;
+    { 
+        return User::editUsers($id);
     }
 
     /**
@@ -87,16 +84,12 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {   
-        $user = User::deleteUsers($id);
-    
-        return $user;
+        return User::deleteUsers($id);
     }
 
     /*Live search */
     public function search(Request $request)
     {
-        $data = User::searchUsers($request);
-
-        return $data;
+        return User::searchUsers($request);;
     }
 }

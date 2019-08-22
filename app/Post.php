@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Redirect, Response;
 
 class Post extends Model
 {
@@ -16,21 +17,20 @@ class Post extends Model
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
-    public function scopePublished($query)
+    public function feedback()
     {
-        return $query->where('published', true);
+        return $this->hasMany('App\FeedBack', 'post_id', 'id');
     }
 
-    public function scopeUnpublished($query)
-    {
-        return $query->where('published', false);
-    }
+    public static function getPosts($index) {
 
-    public static function getPosts() {
-        $user_id = Auth::user()->id;
-
-        if(Auth::user()->role != 'admin') {
-            $data['posts'] = Post::where('user_id', $user_id)->orderBy('id','desc')->paginate(9);
+        if(Auth::check()) {
+            if($index != 0) {
+                $user_id = Auth::user()->id;
+                $data['posts'] = Post::where('user_id', $user_id)->orderBy('id','desc')->paginate(9);
+            } else {
+                $data['posts'] = Post::orderBy('id','desc')->paginate(9);
+            }
         } else {
             $data['posts'] = Post::orderBy('id','desc')->paginate(9);
         }
@@ -61,10 +61,13 @@ class Post extends Model
     public static function searchPosts($request) {
         if($request->ajax()) {
             $search = $request->get('search');
-            $posts = Post::where('title', 'LIKE', '%'.$search.'%')->get();
+            $user_id = $request->get('user_id');
+            $posts = Post::where([
+                                    ['title', 'LIKE', '%'.$search.'%'],
+                                    ['user_id', 'LIKE', '%'.$user_id.'%'],
+                                ])->get();
             $data = view('elements.post-paragraph', ['posts' => $posts])->render();
             return response()->json([
-                'error' => false,
                 'html' => $data,
             ]);
         }

@@ -26,13 +26,15 @@ Route::post('register', 'RegistrationController@store');
 
 //Route to get dynimic login + logout
 Route::get('/login', 'SessionsController@create') -> middleware('checklogout');
-
 Route::post('/login', 'SessionsController@store');
 Route::get('/logout', 'SessionsController@destroy');
 
 //Route index
 Route::get('/index', 'IndexController@index');
 Route::post('/index/search', 'IndexController@search');
+
+//Route feedback
+Route::post('/index/store', 'IndexController@store');
 
 //Route CRUD admin
 Route::post('/admin/search', 'AdminController@search');

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SessionRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\User;
 
 class SessionsController extends Controller
 {
@@ -13,25 +14,10 @@ class SessionsController extends Controller
     }
 
     public function store(SessionRequest $request) {
-        $user = $request->only('name', 'password');
-        if(auth() -> attempt($user) == false) {
-            return back() -> withErrors([
-                'message' => 'Password or Username is incorrect' 
-            ]);
-        } else {
-            $user = Auth::user()->role;
-            if($user == "admin") {
-                return redirect() -> to('/admin');
-            } else {
-                return redirect() -> to('/post');
-            }
-        }
+        return User::checkLogin($request);
     }
 
     public function destroy() {
-        
-        auth() -> logout();
-
-        return redirect() -> to('/index');
+        return User::checkLogout();
     }
 }

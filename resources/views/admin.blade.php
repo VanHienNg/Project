@@ -43,8 +43,9 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Staffs</a>
-                        <a class="collapse-item" href="cards.html">Products</a>
+                        <a class="collapse-item" href="/admin">Staffs</a>
+                        <a class="collapse-item" href="/post">Users</a>
+                        <a class="collapse-item" href="/index">Posts</a>
                     </div>
                 </div>
             </li>
@@ -160,7 +161,7 @@
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
                                     value="" maxlength="50" required="">
                                 @if ($errors->has('name'))
-                                <span class="text-danger">{{ $errors->first('name') }}</span>
+                                    {{ $errors->first('name') }}
                                 @endif
                             </div>
                         </div>
@@ -170,18 +171,20 @@
                             <div class="col-sm-12">
                                 <input type="email" class="form-control" id="email" name="email"
                                     placeholder="Enter Email" value="" required="">
+                                <div class="error-alert">
                                 @if ($errors->has('email'))
-                                <span class="text-danger lol">{{ $errors->first('email') }}</span>
+                                <span class="text-danger">{{ $errors->first('email') }}</span>
                                 @endif
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group" style="margin-top:10px">
-                            <label class="col-sm-6 control-label">Email:</label>
+                            <label class="col-sm-6 control-label">Role:</label>
                             <div class="col-sm-12">
                                 <select class="col-sm-4 form-control" name="role" id="role" name="role" value=""
                                     require="">
-                                    <option>-- Role --</option>
+                                    <option>-- select --</option>
                                     <option value="staff">Staff</option>
                                     <option value="admin">Admin</option>
                                 </select>
